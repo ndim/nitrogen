@@ -15,8 +15,12 @@ render(ControlID, Record) ->
 	end,
 
 	Content = wf:render(Record#list.body),
-	wf_tags:emit_tag(Tag, Content, [
-		{id, ControlID},
-		{class, [list, Record#list.class]},
-		{style, Record#list.style}
-	]).
+	case lists:flatlength(Content) of
+		0 ->	[];
+		_ ->
+			wf_tags:emit_tag(Tag, Content, [
+				{id, ControlID},
+				{class, [list, Record#list.class]},
+				{style, Record#list.style}
+			])
+	end.
