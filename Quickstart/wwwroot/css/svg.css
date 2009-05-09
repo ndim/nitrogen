@@ -1,18 +1,25 @@
-svg {
+/* This stylesheet uses CSS3's "CSS Namespaces Module"
+ * http://www.w3.org/TR/css3-namespace/
+ */
+
+@namespace xhtml "http://www.w3.org/1999/xhtml";
+@namespace svg "http://www.w3.org/2000/svg";
+
+xhtml|* svg|svg {
     border: solid 1.5pt black;
     padding: 0.5ex;
     margin: 0;
     background-color: #ffdddd;
 }
 
-svg circle {
+svg|svg svg|circle {
     fill: #448844;
     fill-opacity: 50%;
     stroke: #0000ff;
     stroke-width: 5;
 }
 
-svg text {
+svg|svg svg|text {
     font-family: serif;
     font-weight: bold;
     fill: #ff0000;
