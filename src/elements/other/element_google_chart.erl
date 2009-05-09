@@ -15,7 +15,7 @@ render(ControlID, Record) ->
 
 	% Chart Type...
 	Type = [
-		"&cht=",
+		"&amp;cht=",
 		case Record#google_chart.type of
 			line -> "lc";
 			sparkline -> "ls";
@@ -33,17 +33,17 @@ render(ControlID, Record) ->
 	Title = case Record#google_chart.title of
 		undefined -> [];
 		[] -> [];
-		OtherTitle -> ["&chtt=", wf_utils:url_encode(OtherTitle)]
+		OtherTitle -> ["&amp;chtt=", wf_utils:url_encode(OtherTitle)]
 	end,
 	
 	% Title Color and Font Size...
-	TitleStyle = wf:f("&chts=~s,~b", [wf:to_list(Record#google_chart.color), Record#google_chart.font_size]),
+	TitleStyle = wf:f("&amp;chts=~s,~b", [wf:to_list(Record#google_chart.color), Record#google_chart.font_size]),
 	
 	% Size...
-	Size = wf:f("&chs=~bx~b", [Record#google_chart.width, Record#google_chart.height]),
+	Size = wf:f("&amp;chs=~bx~b", [Record#google_chart.width, Record#google_chart.height]),
 	
 	% Grid...
-	Grid = wf:f("&chg=~s,~s,~b,~b", [
+	Grid = wf:f("&amp;chg=~s,~s,~b,~b", [
 		wf:to_list(wf:coalesce([Record#google_chart.grid_x, 0])),
 		wf:to_list(wf:coalesce([Record#google_chart.grid_y, 0])),
 		Record#google_chart.grid_line_length,
@@ -51,13 +51,13 @@ render(ControlID, Record) ->
 	]),
 	
 	% Background Colors...
-	BGColors = wf:f("&chf=bg,s,~s|c,s,~s", [
+	BGColors = wf:f("&amp;chf=bg,s,~s|c,s,~s", [
 		wf:to_list(Record#google_chart.background_color), 
 		wf:to_list(Record#google_chart.chart_color)
 	]),
 	
 	% Legend Location...
-	LegendLocation = "&chdlp=" ++ case Record#google_chart.legend_location of
+	LegendLocation = "&amp;chdlp=" ++ case Record#google_chart.legend_location of
 		top -> "t";
 		left -> "l";
 		bottom -> "b";
@@ -70,9 +70,9 @@ render(ControlID, Record) ->
 		[] -> [];
 		AxesRecords ->			
 			ProcessedAxes = [process_axis(N - 1, lists:nth(N, AxesRecords)) || N <- lists:seq(1, length(AxesRecords))],
-			AxesPositions = "&chxt=" ++ string:join([X || [X, _, _] <- ProcessedAxes], ","),
-			AxesLabels    = "&chxl=" ++ string:join([X || [_, X, _] <- ProcessedAxes], "|"),
-			AxesColors    = "&chxs=" ++ string:join([X || [_, _, X] <- ProcessedAxes], "|"),
+			AxesPositions = "&amp;chxt=" ++ string:join([X || [X, _, _] <- ProcessedAxes], ","),
+			AxesLabels    = "&amp;chxl=" ++ string:join([X || [_, X, _] <- ProcessedAxes], "|"),
+			AxesColors    = "&amp;chxs=" ++ string:join([X || [_, _, X] <- ProcessedAxes], "|"),
 			AxesPositions ++ AxesLabels ++ AxesColors
 	end,
 	
@@ -82,14 +82,14 @@ render(ControlID, Record) ->
 		[] -> MaxValueLength=0, [];
 		DataRecords ->
 			ProcessedData = [process_data(N -1, lists:nth(N, DataRecords)) || N <- lists:seq(1, length(DataRecords))],
-			DataColors  = "&chco="  ++ string:join([X || [X, _, _, _, _, _] <- ProcessedData], ","),
-			DataLegends = "&chdl="  ++ string:join([X || [_, X, _, _, _, _] <- ProcessedData], "|"),
-			DataScales  = "&chds="  ++ string:join([X || [_, _, X, _, _, _] <- ProcessedData], ","),
-			DataStyles  = "&chls="  ++ string:join([X || [_, _, _, X, _, _] <- ProcessedData], "|"),
-			DataValues  = "&chd=t:" ++ string:join([X || [_, _, _, _, X, _] <- ProcessedData], "|"),
+			DataColors  = "&amp;chco="  ++ string:join([X || [X, _, _, _, _, _] <- ProcessedData], ","),
+			DataLegends = "&amp;chdl="  ++ string:join([X || [_, X, _, _, _, _] <- ProcessedData], "|"),
+			DataScales  = "&amp;chds="  ++ string:join([X || [_, _, X, _, _, _] <- ProcessedData], ","),
+			DataStyles  = "&amp;chls="  ++ string:join([X || [_, _, _, X, _, _] <- ProcessedData], "|"),
+			DataValues  = "&amp;chd=t:" ++ string:join([X || [_, _, _, _, X, _] <- ProcessedData], "|"),
 			MaxValueLength = lists:max([X || [_, _, _, _, _, X] <- ProcessedData]),
 			DataLegends1 = case string:strip(DataLegends, both, $|) of
-				"&chdl=" -> [];
+				"&amp;chdl=" -> [];
 				_ -> DataLegends
 			end,				
 			
@@ -113,12 +113,13 @@ render(ControlID, Record) ->
 				_ -> 0
 			end,
 			IndividualBarSize = (AvailablePixels - GroupSpacerPixels - BarSpacerPixels) / (DataGroupsLength * MaxValueLength),
-			wf:f("&chbh=~b,~b,~b", [trunc(IndividualBarSize), BarSpace, BarGroupSpace])
+			wf:f("&amp;chbh=~b,~b,~b", [trunc(IndividualBarSize), BarSpace, BarGroupSpace])
 	end,
 	
 	% Render the image tag...
 	Image = #image {
 		class="google_chart " ++ wf:to_list(Record#google_chart.class),
+                alt   = "FIXME: chart text description",
 		style = Record#google_chart.style,
 		image = lists:flatten([Path, Type, Title, TitleStyle, Size, Grid, BGColors, LegendLocation, BarSize, Axes, Data])
 	},
