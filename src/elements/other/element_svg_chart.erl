@@ -16,22 +16,22 @@ reflect() ->
 
 render(_ControlID, #svg_chart{title=test}) ->
     Attrs =
-	[{xmlns, "http://www.w3.org/2000/svg"},
+	[{'xmlns:svg', "http://www.w3.org/2000/svg"},
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 100"},
 	 {style, "width: 10em; height: 10em;"}
 	],
     Content =
-	[wf_tags:emit_tag(desc, "Example SVG chart", []),
-	 wf_tags:emit_tag(circle, [{cx, 50}, {cy, 50}, {r,40}]),
-	 wf_tags:emit_tag(text, "SVG", [{x, 50}, {y, 50}])
+	[wf_tags:emit_tag('svg:desc', "Example SVG chart", []),
+	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,40}]),
+	 wf_tags:emit_tag('svg:text', "SVG", [{x, 50}, {y, 50}])
 	],
-    wf_tags:emit_tag(svg, Content, Attrs);
+    wf_tags:emit_tag('svg:svg', Content, Attrs);
 render(ControlID, Record) when is_record(Record, svg_chart) ->
     %% io:format("General SVG Chart render(): ~p~n", [ControlID]),
     Attrs =
-	[{xmlns, "http://www.w3.org/2000/svg"},
+	[{'xmlns:svg', "http://www.w3.org/2000/svg"},
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 200"},
@@ -41,8 +41,8 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
     Content =
 	[case Record#svg_chart.title of
 	     "" -> "";
-	     Title -> wf_tags:emit_tag(desc, Title, [])
+	     Title -> wf_tags:emit_tag('svg:desc', Title, [])
 	 end,
-	 wf_tags:emit_tag(circle, [{cx, 50}, {cy, 50}, {r,30}])
+	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30}])
 	],
-    wf_tags:emit_tag(svg, Content, Attrs).
+    wf_tags:emit_tag('svg:svg', Content, Attrs).
