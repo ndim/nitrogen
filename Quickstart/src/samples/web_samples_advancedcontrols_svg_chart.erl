@@ -21,7 +21,9 @@ body() ->
     wf_platform:set_content_type("application/xhtml+xml; charset=utf-8"),
     [
      #h2 { text="Test Chart" },
-     #svg_chart{title=test}
+     #svg_chart{title=test},
+     #h2 { text="Proper Chart" },
+     #svg_chart{title="Titled Chart"}
     ].
 
 event(_) -> ok.
