@@ -20,11 +20,11 @@ render(_ControlID, #svg_chart{}) ->
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 100"},
-	 {style, "width: 20em; height: 20em;"}
+	 {style, "width: 10em; height: 10em;"}
 	],
     Content =
 	[wf_tags:emit_tag(desc, "Example SVG chart", []),
-	 wf_tags:emit_tag(circle, [{cx, 50}, {cy, 50}, {r,30}]),
+	 wf_tags:emit_tag(circle, [{cx, 50}, {cy, 50}, {r,40}]),
 	 wf_tags:emit_tag(text, "SVG", [{x, 50}, {y, 50}])
 	],
     wf_tags:emit_tag(svg, Content, Attrs);
