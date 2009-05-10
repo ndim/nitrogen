@@ -31,11 +31,13 @@
 
 
 list_count(List) ->
-    lists:foldl(fun(Elt, {AccList,Index}) ->
-			{[{Index,Elt}|AccList], Index+1}
-		end,
-		{[], 0},
-		List).
+    {IdxList, Count} =
+	lists:foldl(fun(Elt, {AccList,Index}) ->
+			    {[{Index,Elt}|AccList], Index+1}
+		    end,
+		    {[], 0},
+		    List),
+    {lists:reverse(IdxList), Count}.
 
 
 reflect() ->
@@ -183,9 +185,8 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	 {id, ControlID}
 	],
     Axes = [ render_axis(A) || A <- Record#svg_chart.axes],
+    {NumberedData, DataCount} = list_count(Record#svg_chart.data),
     Plots = [ render_plot(D) || D <- Record#svg_chart.data],
-    {RawNumberedData, DataCount} = list_count(Record#svg_chart.data),
-    NumberedData = lists:reverse(RawNumberedData),
     Content =
 	[case Record#svg_chart.title of
 	     "" -> "";
