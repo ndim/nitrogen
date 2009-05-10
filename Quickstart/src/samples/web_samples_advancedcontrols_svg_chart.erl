@@ -31,7 +31,7 @@ body() ->
 	],
     ChartDivClass = "svg-chart",
     [
-     #h2 { text="Line Chart" }, "\n",
+     #h2 { text="Line Chart (inline document)" }, "\n",
      wf_tags:emit_tag('div',
 		      [
 		       web_samples_contenttype_svg_chart:line_chart()
@@ -39,6 +39,7 @@ body() ->
 		      [{style, ChartDivStyle},
 		       {class, ChartDivClass}]),
      "\n",
+     #h2 { text="Line Chart (external object)" }, "\n",
      wf_tags:emit_tag('div',
 		      [
 		       wf_tags:emit_tag('object',
