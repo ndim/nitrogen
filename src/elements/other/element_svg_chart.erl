@@ -134,7 +134,7 @@ render_legend(DataCount, NumberedData) ->
 	  ]
 	  || {Index, Data} <- NumberedData ]
        ], [{class, "svg-chart-legend"},
-	   {transform, "none"}]).
+	   {transform, "translate(155,5)"}]).
 
 
 render_background() ->
