@@ -83,8 +83,8 @@ render_plot(line, #chart_data{color=Color, values=Values, line_width=RawLW}) ->
 	      [Color, ValueCount, LW,
 	       Values, IndexValues, Points]),
     [{FirstX, FirstY}|Tail] = Points,
-    D = [io_lib:format("M ~w,~w ", [FirstX, FirstY]),
-	 [ io_lib:format("L ~w,~w ", [X,Y]) || {X,Y} <- Tail]],
+    D = [io_lib:format("M ~w,~w", [FirstX, FirstY])]
+	++ [ io_lib:format("L ~w,~w", [X,Y]) || {X,Y} <- Tail],
     Content =
 	[
 	 wf_tags:emit_tag('svg:path',
@@ -148,7 +148,7 @@ render_legend(DataCount, NumberedData) ->
 	    ]),
 	   wf_tags:emit_tag % FIXME: Does not plot anything for SOME reason.
 	   ('svg:plot',
-	    [{d, [io_lib:format("M ~w,~w ",
+	    [{d, [io_lib:format("M ~w,~w",
 				[2, LegendFontSize*(Index+0.5) - 1]),
 		  io_lib:format("l ~w,~w", [10-0.5-2, 4+0.5])]},
 	     {'stroke', Data#chart_data.color},
@@ -220,12 +220,13 @@ render_test_chart() ->
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 100"},
 	 {id, "svg-chart__test-chart"},
-	 {style, "width: 16em; "
-                 "height: 16em; "
-                 "border: solid 1.5pt black; "
-                 "padding: 0.5ex; "
-                 "margin: 0; "
-                 "background-color: #ffdddd; "
+	 {style, ["width: 16em;",
+		  "height: 16em;",
+		  "border: solid 1.5pt black;",
+		  "padding: 0.5ex;",
+		  "margin: 0;",
+		  "background-color: #ffdddd;"
+		 ]
          }
 	],
     Content =
@@ -269,10 +270,10 @@ render(ControlID, #svg_chart{type=line, width=W, height=H} = Record)
 			   io_lib:format(
 			     "width: ~wpx; height: ~wpx;", [W,H])
 		   end,
-		   "border: none; "
-		   "margin: 0; "
-		   "padding: 0; "
-		   ]
+		   "border: none;",
+		   "margin: 0;",
+		   "padding: 0;"
+		  ]
          },
 	 {id, ControlID}
 	],
