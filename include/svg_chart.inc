@@ -23,5 +23,6 @@
 -record(chart_data,
 	{legend,
 	 color,
-	 values
+	 values,
+	 line_width
 	}).

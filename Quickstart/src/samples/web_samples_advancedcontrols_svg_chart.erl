@@ -42,6 +42,7 @@ body() ->
       [#chart_data
        {legend="Data 1",
 	color="#ff9900",
+	line_width=3,
 	values=[10, 20, 30, 20, 30, 40, 40, 50, 60]
        },
        #chart_data

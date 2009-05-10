@@ -68,10 +68,15 @@ render_axis(#chart_axis{position=Pos, labels=Labels}) ->
 					{transform, "none"}]).
 
 
-render_plot(line, #chart_data{color=Color, values=Values}) ->
+render_plot(line, #chart_data{color=Color, values=Values, line_width=RawLW}) ->
     {IndexValues, ValueCount} = list_count(Values),
-    io:format("render_plot(line,...) ~p ~p~n~p~n~p~n", [Color, ValueCount,
-					    Values, IndexValues]),
+    LW = case RawLW of
+	     undefined -> 2;
+	     RawLW when is_integer(RawLW) -> RawLW
+	 end,
+    io:format("render_plot(line,...) ~p ~p ~p~n~p~n~p~n",
+	      [Color, ValueCount, LW,
+	       Values, IndexValues]),
     HScale = 200 / ValueCount,
     [{FirstIdx, FirstValue}|Tail] = IndexValues,
     D = [io_lib:format("M ~w,~w", [(0.5+FirstIdx)*HScale, FirstValue]),
@@ -83,7 +88,7 @@ render_plot(line, #chart_data{color=Color, values=Values}) ->
 			  [{d, D},
 			   {stroke, Color},
 			   {'stroke-opacity', 1},
-			   {'stroke-width', 2},
+			   {'stroke-width', LW},
 			   {'fill', "none"}
 			  ])
 	],
