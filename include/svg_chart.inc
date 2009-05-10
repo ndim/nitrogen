@@ -20,5 +20,6 @@
 
 -record(chart_data,
 	{legend,
+	 color,
 	 values
 	}).

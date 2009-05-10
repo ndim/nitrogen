@@ -31,6 +31,14 @@
 reflect() ->
     record_info(fields, svg_chart).
 
+render_axis(#chart_axis{position=Pos, labels=Labels}) ->
+    Content = [],
+    wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-axis"}]).
+
+render_plot(#chart_data{color=Color, values=Values}) ->
+    Content = [],
+    wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-plot"}]).
+
 render(_ControlID, #svg_chart{title=test}) ->
     Attrs =
 	[{'xmlns:svg', ?XMLNS_SVG},
@@ -81,11 +89,55 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
          },
 	 {id, ControlID}
 	],
+    Axes = [ render_axis(A) || A <- Record#svg_chart.axes],
+    Plots = [ render_plot(D) || D <- Record#svg_chart.data],
+    {RawNumberedData, DataCount} =
+	lists:foldl(
+	  fun(Elt, {List,Index}) ->
+		  {[{Index,Elt}|List], Index+1}
+	  end, {[], 0},
+	  Record#svg_chart.data),
+    NumberedData = lists:reverse(RawNumberedData),
+    LegendFontSize = 7,
+    Legend = wf_tags:emit_tag('svg:g',
+			      [
+			       wf_tags:emit_tag('svg:rect',
+						[{x,0}, {y,0},
+						 {height, LegendFontSize*DataCount},
+						 {width, 40},
+						 {'fill', "#ffffff"},
+						 {'fill-opacity', "1.0"},
+						 {'stroke', "#000000"},
+						 {'stroke-width', 1}
+						]),
+			       [ [wf_tags:emit_tag('svg:text',
+						   Data#chart_data.legend,
+						   [{x,10+1},
+						    {y,LegendFontSize*(1+Index)},
+						    {'font-family', "sans"},
+						    {'font-size', LegendFontSize},
+						    {'font-weight', "normal"},
+						    {'fill', "#000000"},
+						    {'fill-opacity', "1.0"},
+						    {'stroke', "#000000"},
+						    {'stroke-width', 0},
+						    {'text-anchor', "left"}
+						   ]),
+				  wf_tags:emit_tag('svg:rect',
+						   [{x,2},
+						    {y,LegendFontSize*(Index)
+						     +LegendFontSize div 2
+						     -1},
+						    {height, 2},
+						    {width, 10-1-2},
+						    {'fill', Data#chart_data.color},
+						    {'fill-opacity', "1.0"}
+						   ])
+				 ]
+				 || {Index, Data} <- NumberedData ]
+			      ], [{class, "svg-chart-legend"}]),
     CircID = wf:temp_id(),
     CircRef = lists:flatten(io_lib:format("#~s", [CircID])),
-    DiagContent =
-	[
-	],
     Content =
 	[case Record#svg_chart.title of
 	     "" -> "";
@@ -95,12 +147,6 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	     "" -> "";
 	     Desc -> wf_tags:emit_tag('svg:desc', Desc, [])
 	 end,
-	 wf_tags:emit_tag('svg:rect', [{x,0}, {y,0},
-				       {height, 100},
-				       {width, 200},
-				       {fill, "#ffff88"},
-				       {'fill-opacity', "0.5"}
-				      ]),
 	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30},
                                          {'fill', "#bb8888"},
                                          {'fill-opacity', "0.7"},
@@ -114,6 +160,17 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	 wf_tags:emit_tag('svg:use', [{x,100}, {y,50},
 				      {'xlink:href', CircRef},
 				      {transform, "translate(-50,-50)"}]),
-	 wf_tags:emit_tag('svg:g', DiagContent, [])
+	 wf_tags:emit_tag('svg:rect', [{x,0}, {y,0},
+				       {height, 100},
+				       {width, 200},
+				       {fill, "#ffffcc"},
+				       {'fill-opacity', "0.7"}
+				      ]),
+	 wf_tags:emit_tag('svg:g',
+			  [
+			   wf_tags:emit_tag('svg:g', Axes, [{class, "svg-chart-axes"}]),
+			   wf_tags:emit_tag('svg:g', Plots, [{class, "svg-chart-plots"}]),
+			   Legend
+			  ], [{class, "svg-chart-content"}])
 	],
     wf_tags:emit_tag('svg:svg', Content, Attrs).
