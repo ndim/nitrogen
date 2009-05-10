@@ -94,7 +94,8 @@ render_legend(DataCount, NumberedData) ->
 	    ])
 	  ]
 	  || {Index, Data} <- NumberedData ]
-       ], [{class, "svg-chart-legend"}]).
+       ], [{class, "svg-chart-legend"},
+	   {transform, "none"}]).
 
 
 render_background() ->
@@ -127,7 +128,8 @@ render_background() ->
 			  {'fill-opacity', "0.8"}
 			 ])
        ],
-       [{class, 'svg-chart-background'}]).
+       [{class, 'svg-chart-background'},
+	{transform, "none"}]).
 
 
 render_test_chart() ->
@@ -200,10 +202,13 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	 wf_tags:emit_tag('svg:g',
 			  [
 			   wf_tags:emit_tag('svg:g', Axes,
-					    [{class, "svg-chart-axes"}]),
+					    [{class, "svg-chart-axes"},
+					     {transform, "none"}]),
 			   wf_tags:emit_tag('svg:g', Plots,
-					    [{class, "svg-chart-plots"}]),
+					    [{class, "svg-chart-plots"},
+					     {transform, "none"}]),
 			   render_legend(DataCount, NumberedData)
-			  ], [{class, "svg-chart-content"}])
+			  ], [{class, "svg-chart-content"},
+			      {transform, "none"}])
 	],
     wf_tags:emit_tag('svg:svg', Content, Attrs).
