@@ -66,7 +66,11 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
     Content =
 	[case Record#svg_chart.title of
 	     "" -> "";
-	     Title -> wf_tags:emit_tag('svg:desc', Title, [])
+	     Title -> wf_tags:emit_tag('svg:title', Title, [])
+	 end,
+	 case Record#svg_chart.description of
+	     "" -> "";
+	     Desc -> wf_tags:emit_tag('svg:desc', Desc, [])
 	 end,
 	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30},
                                          {'fill', "#bb8888"},

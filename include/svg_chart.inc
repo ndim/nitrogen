@@ -8,6 +8,7 @@
 	{?ELEMENT_BASE(element_svg_chart),
 	 type=line,
 	 title="",
+	 description="",
 	 axes=[],
 	 data=[]
 	}).
