@@ -164,7 +164,7 @@ render_background() ->
 			  {height, 100},
 			  {width, 200},
 			  {fill, "#ffffff"},
-			  {'fill-opacity', "0.8"}
+			  {'fill-opacity', "0.9"}
 			 ])
        ],
        [{class, 'svg-chart-background'},
