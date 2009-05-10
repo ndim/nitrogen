@@ -45,13 +45,52 @@ reflect() ->
 
 
 render_axis(#chart_axis{position=Pos, labels=Labels}) ->
-    Content = [],
-    wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-axis"}]).
+    Content =
+	[
+	 case Pos of
+	     bottom ->
+		 wf_tags:emit_tag('svg:path',
+				  [{d, "M 1,95 l 198,0"},
+				   {stroke, "#008800"},
+				   {'stroke-opacity', 1},
+				   {'stroke-width', 1}
+				  ]);
+	     left ->
+		 wf_tags:emit_tag('svg:path',
+				  [{d, "M 5,1 l 0,98"},
+				   {stroke, "#880000"},
+				   {'stroke-opacity', 1},
+				   {'stroke-width', 1}
+				  ])
+	 end
+	],
+    wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-axis"},
+					{transform, "none"}]).
 
 
-render_plot(#chart_data{color=Color, values=Values}) ->
-    Content = [],
-    wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-plot"}]).
+render_plot(line, #chart_data{color=Color, values=Values}) ->
+    {IndexValues, ValueCount} = list_count(Values),
+    io:format("render_plot(line,...) ~p ~p~n~p~n~p~n", [Color, ValueCount,
+					    Values, IndexValues]),
+    HScale = 200 / ValueCount,
+    [{FirstIdx, FirstValue}|Tail] = IndexValues,
+    D = [io_lib:format("M ~w,~w", [(0.5+FirstIdx)*HScale, FirstValue]),
+	 [ io_lib:format("L ~w,~w", [(0.5+Idx)*HScale, Val])
+	   || {Idx,Val} <- Tail]],
+    Content =
+	[
+	 wf_tags:emit_tag('svg:path',
+			  [{d, D},
+			   {stroke, Color},
+			   {'stroke-opacity', 1},
+			   {'stroke-width', 5},
+			   {'fill', "none"}
+			  ])
+	],
+    wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-plot"},
+					{transform, %"none"
+					 "scale(1, -1) translate(0, -95)"
+					}]).
 
 
 render_legend(DataCount, NumberedData) ->
@@ -171,8 +210,9 @@ render_test_chart() ->
 render(_ControlID, #svg_chart{title=test}) ->
     render_test_chart();
 
-render(ControlID, Record) when is_record(Record, svg_chart) ->
-    %% io:format("General SVG Chart render(): ~p~n", [ControlID]),
+render(ControlID, #svg_chart{type=line} = Record) when is_record(Record, svg_chart) ->
+    io:format("===========================================================~n",
+	      []),
     Attrs =
 	[{'xmlns:svg', ?XMLNS_SVG},
 	 {'xmlns:xlink', ?XMLNS_XLINK},
@@ -188,8 +228,8 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	 {id, ControlID}
 	],
     Axes = [ render_axis(A) || A <- Record#svg_chart.axes],
+    Plots = [ render_plot(line, D) || D <- Record#svg_chart.data],
     {NumberedData, DataCount} = list_count(Record#svg_chart.data),
-    Plots = [ render_plot(D) || D <- Record#svg_chart.data],
     Content =
 	[case Record#svg_chart.title of
 	     "" -> "";
