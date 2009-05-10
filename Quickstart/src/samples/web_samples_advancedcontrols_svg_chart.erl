@@ -21,11 +21,38 @@ headline() -> "SVG Charts Example".
 right() -> linecount:render().
 
 body() ->
+    ChartDivStyle =
+	["border: solid 1.5pt #0000dd;",
+	 "background-color: #ccccff;",
+	 "margin: 0;",
+	 "padding: 0.5ex;",
+	 "width: 600px;",
+	 "height: 300px;"
+	],
+    ChartDivClass = "svg-chart",
     [
-     #h2 { text="Line Chart" },
-     web_samples_contenttype_svg_chart:line_chart(),
-     #h2 { text="Test Chart" },
-     #svg_chart{title=test}
+     #h2 { text="Line Chart" }, "\n",
+     wf_tags:emit_tag('div',
+		      [
+		       web_samples_contenttype_svg_chart:line_chart()
+		      ],
+		      [{style, ChartDivStyle},
+		       {class, ChartDivClass}]),
+     "\n",
+     wf_tags:emit_tag('div',
+		      [
+		       wf_tags:emit_tag('object',
+					[{data, "contenttype_svg_chart"},
+					 {type, "image/svg+xml"},
+					 {style, ["width:600px;",
+						  "height:300px;"]}
+					])
+		       ],
+		      [{style, ChartDivStyle},
+		       {class, ChartDivClass}]),
+     "\n",
+     #h2 { text="Test Chart" }, "\n",
+     #svg_chart{title=test}, "\n"
     ].
 
 event(_) -> ok.

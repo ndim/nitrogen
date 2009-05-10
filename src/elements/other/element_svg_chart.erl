@@ -247,15 +247,14 @@ render(ControlID, #svg_chart{type=line, width=W, height=H} = Record)
 	 {viewBox, "0 0 200 100"},
 	 {style, [ case {W,H} of
 		       {none,none} ->
-			   "width: 32em; height: 32ex; ";
+			   "width: 32em; height: 32ex;";
 		       {Wi,Hi} when is_integer(Wi), is_integer(Hi) ->
 			   io_lib:format(
-			     "width: ~wpx; height: ~wpx; ", [W,H])
+			     "width: ~wpx; height: ~wpx;", [W,H])
 		   end,
-		   "border: solid 1.5pt #0000dd; "
-		   "background-color: #ccccff; "
+		   "border: none; "
 		   "margin: 0; "
-		   "padding: 0.5ex; "
+		   "padding: 0; "
 		   ]
          },
 	 {id, ControlID}
