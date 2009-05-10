@@ -83,7 +83,7 @@ render_plot(line, #chart_data{color=Color, values=Values}) ->
 			  [{d, D},
 			   {stroke, Color},
 			   {'stroke-opacity', 1},
-			   {'stroke-width', 5},
+			   {'stroke-width', 2},
 			   {'fill', "none"}
 			  ])
 	],
