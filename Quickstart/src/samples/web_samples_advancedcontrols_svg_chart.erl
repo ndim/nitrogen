@@ -53,7 +53,7 @@ body() ->
 		       {class, ChartDivClass}]),
      "\n",
      #h2 { text="Test Chart" }, "\n",
-     #svg_chart{title=test}, "\n"
+     #svg_chart{title=test, id="svg-chart__test-chart"}, "\n"
     ].
 
 event(_) -> ok.

@@ -248,13 +248,13 @@ render_background() ->
 	{transform, "none"}]).
 
 
-render_test_chart() ->
+render_test_chart(ControlID) ->
     Attrs =
 	[{'xmlns:svg', ?XMLNS_SVG},
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 100"},
-	 {id, "svg-chart__test-chart"},
+	 {id, ControlID},
 	 {style, ["width: 16em;",
 		  "height: 16em;",
 		  "border: solid 1.5pt black;",
@@ -285,8 +285,8 @@ render_test_chart() ->
     wf_tags:emit_tag('svg:svg', Content, Attrs).
 
 
-render(_ControlID, #svg_chart{title=test}) ->
-    render_test_chart();
+render(ControlID, #svg_chart{title=test}) ->
+    render_test_chart(ControlID);
 
 render(ControlID, #svg_chart{type=line, width=W, height=H} = Record)
   when is_record(Record, svg_chart) ->
