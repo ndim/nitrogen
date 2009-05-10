@@ -68,20 +68,23 @@ render_axis(#chart_axis{position=Pos, labels=Labels}) ->
 					{transform, "none"}]).
 
 
+default_line_width(undefined) ->
+    2;
+default_line_width(LineWidth) when is_integer(LineWidth) ->
+    LineWidth.
+
+
 render_plot(line, #chart_data{color=Color, values=Values, line_width=RawLW}) ->
     {IndexValues, ValueCount} = list_count(Values),
-    LW = case RawLW of
-	     undefined -> 2;
-	     RawLW when is_integer(RawLW) -> RawLW
-	 end,
-    io:format("render_plot(line,...) ~p ~p ~p~n~p~n~p~n",
-	      [Color, ValueCount, LW,
-	       Values, IndexValues]),
+    LW = default_line_width(RawLW),
     HScale = 200 / ValueCount,
-    [{FirstIdx, FirstValue}|Tail] = IndexValues,
-    D = [io_lib:format("M ~w,~w", [(0.5+FirstIdx)*HScale, FirstValue]),
-	 [ io_lib:format("L ~w,~w", [(0.5+Idx)*HScale, Val])
-	   || {Idx,Val} <- Tail]],
+    Points = [ {(0.5+Idx)*HScale, Val} || {Idx,Val} <- IndexValues ],
+    io:format("render_plot(line,...) ~p ~p ~p~n~p~n~p~n~p~n",
+	      [Color, ValueCount, LW,
+	       Values, IndexValues, Points]),
+    [{FirstX, FirstY}|Tail] = Points,
+    D = [io_lib:format("M ~w,~w ", [FirstX, FirstY]),
+	 [ io_lib:format("L ~w,~w ", [X,Y]) || {X,Y} <- Tail]],
     Content =
 	[
 	 wf_tags:emit_tag('svg:path',
