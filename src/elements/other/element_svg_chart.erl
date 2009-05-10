@@ -94,7 +94,15 @@ render_plot(line, #chart_data{color=Color, values=Values, line_width=RawLW}) ->
 			   {'stroke-width', LW},
 			   {'fill', "none"}
 			  ])
-	],
+	] ++
+	[ wf_tags:emit_tag('svg:circle',
+			   [{cx, io_lib:format("~w", [X])},
+			    {cy, io_lib:format("~w", [Y])},
+			    {r, io_lib:format("~w", [1.2*LW])},
+			    {'fill', Color},
+			    {'fill-opacity', 1},
+			    {stroke, "none"}])
+	  || {X,Y} <- Points],
     wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-plot"},
 					{transform, %"none"
 					 "scale(1, -1) translate(0, -95)"
