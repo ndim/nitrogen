@@ -106,7 +106,7 @@ render_legend(DataCount, NumberedData) ->
 	wf_tags:emit_tag
 	('svg:rect',
 	 [{x,0}, {y,0},
-	  {height, LegendFontSize*DataCount},
+	  {height, LegendFontSize*DataCount+2},
 	  {width, 40},
 	  {'fill', "#ffffff"},
 	  {'fill-opacity', "1.0"},
