@@ -134,9 +134,18 @@ render_legend(DataCount, NumberedData) ->
 	    [{x,2},
 	     {y,LegendFontSize*(Index) +LegendFontSize div 2 -1},
 	     {height, 4},
-	     {width, 10-1-2},
+	     {width, 10-1-2-4},
 	     {'fill', Data#chart_data.color},
 	     {'fill-opacity', "1.0"}
+	    ]),
+	   wf_tags:emit_tag % FIXME: Does not plot anything for SOME reason.
+	   ('svg:plot',
+	    [{d, [io_lib:format("M ~w,~w ",
+				[2, LegendFontSize*(Index+0.5) - 1]),
+		  io_lib:format("l ~w,~w", [10-0.5-2, 4+0.5])]},
+	     {'stroke', Data#chart_data.color},
+	     %{'stroke-opacity', 1},
+	     {'stroke-width', default_line_width(Data#chart_data.line_width)}
 	    ])
 	  ]
 	  || {Index, Data} <- NumberedData ]
