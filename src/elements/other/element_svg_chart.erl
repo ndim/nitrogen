@@ -131,7 +131,7 @@ render_legend(DataCount, NumberedData) ->
 	   ('svg:rect',
 	    [{x,2},
 	     {y,LegendFontSize*(Index) +LegendFontSize div 2 -1},
-	     {height, 2},
+	     {height, 4},
 	     {width, 10-1-2},
 	     {'fill', Data#chart_data.color},
 	     {'fill-opacity', "1.0"}
