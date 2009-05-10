@@ -22,9 +22,7 @@ right() -> linecount:render().
 
 body() ->
     [
-     #h2 { text="Test Chart" },
-     #svg_chart{title=test},
-     #h2 { text="Proper Chart" },
+     #h2 { text="Line Chart" },
      #svg_chart
      {title="Line Chart",
       description="Adapted from Google Charts Example",
@@ -51,7 +49,9 @@ body() ->
 	values=[20, 50, 70, 90, 70, 40, 10,  1,  8]
        }
       ]
-     }
+     },
+     #h2 { text="Test Chart" },
+     #svg_chart{title=test}
     ].
 
 event(_) -> ok.
