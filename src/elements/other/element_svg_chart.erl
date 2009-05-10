@@ -54,7 +54,7 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	[{'xmlns:svg', "http://www.w3.org/2000/svg"},
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
-	 {viewBox, "0 0 100 200"},
+	 {viewBox, "0 0 200 100"},
 	 {style, "width: 32em; height: 16em; "
                  "border: solid 1.5pt #0000dd; "
                  "background-color: #ccccff; "
