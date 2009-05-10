@@ -9,16 +9,35 @@
 -export ([emit_tag/2, emit_tag/3]).
 
 %%%  Empty tags %%%
+%%%
+%%%  We try keeping compatibility with pre-XML/tagsoup HTML parsers
+%%%  by avoiding <foo/> type empty elements for all elements with
+%%%  non-empty content models.
 
+emit_tag(TagName, Props) when
+        TagName =:= 'img';
+        TagName =:= 'input';
+        TagName =:= 'option';
+        TagName =:= 'link';
+        TagName =:= 'br' ->
+	STagName = wf:to_list(TagName),
+	[
+		"<",
+		STagName,
+		write_props(Props),
+		" />"
+	];
 emit_tag(TagName, Props) ->
 	STagName = wf:to_list(TagName),
 	[
 		"<",
 		STagName,
 		write_props(Props),
-		"/>"
+		"></",
+	        STagName,
+	        ">"
 	].
-	
+
 %%% Tags with child content %%%
 
 % empty text and body
