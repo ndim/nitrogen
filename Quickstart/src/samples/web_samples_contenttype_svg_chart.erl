@@ -4,7 +4,9 @@
 -compile(export_all).
 
 main() ->
-	wf:set_content_type("image/svg+xml"),
+        %% FIXME: set HTTP header in some way:
+        %%        Content-Disposition: inline; filename=something.svg
+        wf:set_content_type("image/svg+xml"),
         ["<?xml version=\"1.0\" encoding=\"utf-8\"?>\n",
 	 line_chart()].
 
