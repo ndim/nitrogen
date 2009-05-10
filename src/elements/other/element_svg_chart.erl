@@ -20,14 +20,34 @@ render(_ControlID, #svg_chart{title=test}) ->
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 100"},
-	 {style, "width: 10em; height: 10em;"}
+	 {style, "width: 16em; "
+                 "height: 16em; "
+                 "border: solid 1.5pt black; "
+                 "padding: 0.5ex; "
+                 "margin: 0; "
+                 "background-color: #ffdddd; "
+         }
 	],
     Content =
 	[wf_tags:emit_tag('svg:desc', "Example SVG chart", []),
-	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,40}]),
-	 wf_tags:emit_tag('svg:text', "SVG", [{x, 50}, {y, 50}])
-	],
+	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,40},
+                                         {'fill', "#88aa88"},
+                                         {'fill-opacity', "90%"},
+                                         {'stroke', "#8888ff"},
+                                         {'stroke-width', 6}
+                                        ]),
+	 wf_tags:emit_tag('svg:text', "SVG", [{x, 50}, {y, 65},
+                                              {'font-family', "serif"},
+                                              {'font-weight', "bold"},
+                                              {'font-size', 42},
+                                              {'fill', "#ffcc00"},
+                                              {'fill-opacity', "50%"},
+                                              {'stroke', "#ff0000"},
+                                              {'stroke-width', 3},
+                                              {'text-anchor', "middle"}])
+        ],
     wf_tags:emit_tag('svg:svg', Content, Attrs);
+
 render(ControlID, Record) when is_record(Record, svg_chart) ->
     %% io:format("General SVG Chart render(): ~p~n", [ControlID]),
     Attrs =
@@ -35,7 +55,12 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 200"},
-	 {style, "width: 32em; height: 16em;"},
+	 {style, "width: 32em; height: 16em; "
+                 "border: solid 1.5pt #0000dd; "
+                 "background-color: #ccccff; "
+                 "margin: 0; "
+                 "padding: 0.5ex; "
+         },
 	 {id, ControlID}
 	],
     Content =
@@ -43,6 +68,11 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	     "" -> "";
 	     Title -> wf_tags:emit_tag('svg:desc', Title, [])
 	 end,
-	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30}])
+	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30},
+                                         {'fill', "#bb8888"},
+                                         {'fill-opacity', "90%"},
+                                         {'stroke', "#ff0000"},
+                                         {'stroke-width', 5}
+                                        ])
 	],
     wf_tags:emit_tag('svg:svg', Content, Attrs).
