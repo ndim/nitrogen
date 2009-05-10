@@ -138,6 +138,7 @@ render_test_chart() ->
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 100"},
+	 {id, "svg-chart__test-chart"},
 	 {style, "width: 16em; "
                  "height: 16em; "
                  "border: solid 1.5pt black; "
