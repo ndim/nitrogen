@@ -40,6 +40,41 @@ list_count(List) ->
     {lists:reverse(IdxList), Count}.
 
 
+list_min_max(List) ->
+    list_min_max(List, none, none).
+
+list_min_max([], Min, Max) ->
+    {Min,Max};
+list_min_max([Head|Tail], Min, Max) ->
+    list_min_max(Tail,
+		 if Min =:= none -> Head;
+		    Head < Min   -> Head;
+		    true         -> Min
+		 end,
+		 if Max =:= none -> Head;
+		    Head > Max   -> Head;
+		    true         -> Max
+		 end).
+
+
+list_f_min_max(Fun, List) ->
+    list_f_min_max(Fun, List, none, none).
+
+list_f_min_max(_Fun, [], Min, Max) ->
+    {Min,Max};
+list_f_min_max(Fun, [Head|Tail], Min, Max) ->
+    FHead = Fun(Head),
+    list_f_min_max(Fun, Tail,
+		   if Min =:= none -> FHead;
+		      FHead < Min  -> FHead;
+		      true         -> Min
+		   end,
+		   if Max =:= none -> FHead;
+		      FHead > Max  -> FHead;
+		      true         -> Max
+		   end).
+
+
 reflect() ->
     record_info(fields, svg_chart).
 
