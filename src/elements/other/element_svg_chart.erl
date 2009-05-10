@@ -162,8 +162,8 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 			     [{x,0}, {y,0},
 			      {height, 100},
 			      {width, 200},
-			      {fill, "#ffffcc"},
-			      {'fill-opacity', "0.7"}
+			      {fill, "#ffffff"},
+			      {'fill-opacity', "0.8"}
 			     ])
 	   ],
 	   [{class, 'svg-chart-background'}]),
