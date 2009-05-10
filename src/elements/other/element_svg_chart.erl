@@ -195,7 +195,7 @@ render_test_chart() ->
 	[wf_tags:emit_tag('svg:desc', "Example SVG chart", []),
 	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,40},
                                          {'fill', "#88aa88"},
-                                         {'fill-opacity', "90%"},
+                                         {'fill-opacity', "0.9"},
                                          {'stroke', "#8888ff"},
                                          {'stroke-width', 6}
                                         ]),
@@ -204,7 +204,7 @@ render_test_chart() ->
                                               {'font-weight', "bold"},
                                               {'font-size', 42},
                                               {'fill', "#ffcc00"},
-                                              {'fill-opacity', "50%"},
+                                              {'fill-opacity', "0.5"},
                                               {'stroke', "#ff0000"},
                                               {'stroke-width', 3},
                                               {'text-anchor', "middle"}])
