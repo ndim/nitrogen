@@ -95,6 +95,12 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	     "" -> "";
 	     Desc -> wf_tags:emit_tag('svg:desc', Desc, [])
 	 end,
+	 wf_tags:emit_tag('svg:rect', [{x,0}, {y,0},
+				       {height, 100},
+				       {width, 200},
+				       {fill, "#ffff88"},
+				       {'fill-opacity', "0.5"}
+				      ]),
 	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30},
                                          {'fill', "#bb8888"},
                                          {'fill-opacity', "0.7"},
