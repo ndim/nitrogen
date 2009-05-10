@@ -210,7 +210,8 @@ render_test_chart() ->
 render(_ControlID, #svg_chart{title=test}) ->
     render_test_chart();
 
-render(ControlID, #svg_chart{type=line} = Record) when is_record(Record, svg_chart) ->
+render(ControlID, #svg_chart{type=line, width=W, height=H} = Record)
+  when is_record(Record, svg_chart) ->
     io:format("===========================================================~n",
 	      []),
     Attrs =
@@ -219,11 +220,18 @@ render(ControlID, #svg_chart{type=line} = Record) when is_record(Record, svg_cha
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 200 100"},
-	 {style, "width: 32em; height: 16em; "
-                 "border: solid 1.5pt #0000dd; "
-                 "background-color: #ccccff; "
-                 "margin: 0; "
-                 "padding: 0.5ex; "
+	 {style, [ case {W,H} of
+		       {none,none} ->
+			   "width: 32em; height: 32ex; ";
+		       {Wi,Hi} when is_integer(Wi), is_integer(Hi) ->
+			   io_lib:format(
+			     "width: ~wpx; height: ~wpx; ", [W,H])
+		   end,
+		   "border: solid 1.5pt #0000dd; "
+		   "background-color: #ccccff; "
+		   "margin: 0; "
+		   "padding: 0.5ex; "
+		   ]
          },
 	 {id, ControlID}
 	],

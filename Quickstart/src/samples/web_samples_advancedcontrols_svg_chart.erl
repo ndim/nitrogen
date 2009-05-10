@@ -25,6 +25,7 @@ body() ->
      #h2 { text="Line Chart" },
      #svg_chart
      {title="Line Chart",
+      width=600, height=300,
       description="Adapted from Google Charts Example",
       id="svg-chart__line-chart",
       axes=

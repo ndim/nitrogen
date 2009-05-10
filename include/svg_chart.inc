@@ -9,6 +9,8 @@
 	 type=line,
 	 title="",
 	 description="",
+	 width=none,
+	 height=none,
 	 axes=[],
 	 data=[]
 	}).
