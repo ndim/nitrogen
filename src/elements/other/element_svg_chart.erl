@@ -80,23 +80,53 @@ reflect() ->
 
 
 render_axis(#chart_axis{position=Pos, labels=Labels}) ->
+    {NLabels, LCount} = list_count(Labels),
     Content =
 	[
 	 case Pos of
 	     bottom ->
-		 wf_tags:emit_tag('svg:path',
-				  [{d, "M 1,95 l 198,0"},
-				   {stroke, "#008800"},
-				   {'stroke-opacity', 1},
-				   {'stroke-width', 1}
-				  ]);
+		 [wf_tags:emit_tag('svg:path',
+				   [{d, "M 1,95 l 198,0"},
+				    {stroke, "#008800"},
+				    {'stroke-opacity', 1},
+				    {'stroke-width', 1}
+				   ]),
+		  [ wf_tags:emit_tag('svg:text', L,
+				     [{x,io_lib:format("~w",
+						       [1+198/LCount*(0.5+I)])},
+				      {y,100},
+				      {'font-family', "sans"},
+				      {'font-size', "5"},
+				      {'font-weight', "normal"},
+				      {stroke, "none"},
+				      {fill, "#000000"},
+				      {'fill-opacity', 1},
+				      {'text-anchor', "middle"}
+				     ])
+		   || {I,L} <- NLabels
+		   ]];
 	     left ->
-		 wf_tags:emit_tag('svg:path',
-				  [{d, "M 5,1 l 0,98"},
-				   {stroke, "#880000"},
-				   {'stroke-opacity', 1},
-				   {'stroke-width', 1}
-				  ])
+		 [wf_tags:emit_tag('svg:path',
+				   [{d, "M 5,1 l 0,98"},
+				    {stroke, "#880000"},
+				    {'stroke-opacity', 1},
+				    {'stroke-width', 1}
+				   ]),
+		  [ wf_tags:emit_tag('svg:text', L,
+				     [{x,5},
+				      {y,io_lib:format("~w",
+						       [1+98/LCount*(0.5+I)])},
+				      {'font-family', "sans"},
+				      {'font-size', "5"},
+				      {'font-weight', "normal"},
+				      {stroke, "none"},
+				      {fill, "#000000"},
+				      {'fill-opacity', 1},
+				      {'text-anchor', "right"}
+				     ])
+		    || {I,L} <- NLabels
+			  ]
+		 ]
 	 end
 	],
     wf_tags:emit_tag('svg:g', Content, [{class, "svg-chart-axis"},
@@ -168,7 +198,7 @@ render_legend(DataCount, NumberedData) ->
 	     {'font-size', LegendFontSize},
 	     {'font-weight', "normal"},
 	     {'fill', "#000000"},
-	     {'fill-opacity', "1.0"},
+	     {'fill-opacity', 1},
 	     {'stroke', "none"},
 	     {'text-anchor', "left"}
 	    ]),
