@@ -26,6 +26,7 @@
 -include("svg_chart.inc").
 
 -define(XMLNS_SVG, "http://www.w3.org/2000/svg").
+-define(XMLNS_XLINK, "http://www.w3.org/1999/xlink").
 
 reflect() ->
     record_info(fields, svg_chart).
@@ -68,6 +69,7 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
     %% io:format("General SVG Chart render(): ~p~n", [ControlID]),
     Attrs =
 	[{'xmlns:svg', ?XMLNS_SVG},
+	 {'xmlns:xlink', ?XMLNS_XLINK},
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 200 100"},
@@ -78,6 +80,11 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
                  "padding: 0.5ex; "
          },
 	 {id, ControlID}
+	],
+    CircID = wf:temp_id(),
+    CircRef = lists:flatten(io_lib:format("#~s", [CircID])),
+    DiagContent =
+	[
 	],
     Content =
 	[case Record#svg_chart.title of
@@ -90,9 +97,17 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	 end,
 	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30},
                                          {'fill', "#bb8888"},
-                                         {'fill-opacity', "90%"},
+                                         {'fill-opacity', "0.7"},
                                          {'stroke', "#ff0000"},
-                                         {'stroke-width', 5}
-                                        ])
+                                         {'stroke-width', 5},
+					 {id, CircID}
+                                        ]),
+	 wf_tags:emit_tag('svg:use', [{x,150}, {y,50},
+				      {'xlink:href', CircRef},
+				      {transform, "translate(-50,-50)"}]),
+	 wf_tags:emit_tag('svg:use', [{x,100}, {y,50},
+				      {'xlink:href', CircRef},
+				      {transform, "translate(-50,-50)"}]),
+	 wf_tags:emit_tag('svg:g', DiagContent, [])
 	],
     wf_tags:emit_tag('svg:svg', Content, Attrs).
