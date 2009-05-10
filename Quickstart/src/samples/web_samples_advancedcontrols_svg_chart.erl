@@ -28,6 +28,7 @@ body() ->
      #svg_chart
      {title="Line Chart",
       description="Adapted from Google Charts Example",
+      id="svg-chart__line-chart",
       axes=
       [#chart_axis
        {position=bottom,
