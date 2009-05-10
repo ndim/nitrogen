@@ -126,8 +126,7 @@ render_legend(DataCount, NumberedData) ->
 	     {'font-weight', "normal"},
 	     {'fill', "#000000"},
 	     {'fill-opacity', "1.0"},
-	     {'stroke', "#000000"},
-	     {'stroke-width', 0},
+	     {'stroke', "none"},
 	     {'text-anchor', "left"}
 	    ]),
 	   wf_tags:emit_tag
