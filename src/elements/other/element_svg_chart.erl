@@ -11,12 +11,14 @@
 -include("wf.inc").
 -include("svg_chart.inc").
 
+-define(XMLNS_SVG, "http://www.w3.org/2000/svg").
+
 reflect() ->
     record_info(fields, svg_chart).
 
 render(_ControlID, #svg_chart{title=test}) ->
     Attrs =
-	[{'xmlns:svg', "http://www.w3.org/2000/svg"},
+	[{'xmlns:svg', ?XMLNS_SVG},
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 100 100"},
@@ -51,7 +53,7 @@ render(_ControlID, #svg_chart{title=test}) ->
 render(ControlID, Record) when is_record(Record, svg_chart) ->
     %% io:format("General SVG Chart render(): ~p~n", [ControlID]),
     Attrs =
-	[{'xmlns:svg', "http://www.w3.org/2000/svg"},
+	[{'xmlns:svg', ?XMLNS_SVG},
 	 {version, "1.2"},
 	 {baseProfile, "tiny"},
 	 {viewBox, "0 0 200 100"},
