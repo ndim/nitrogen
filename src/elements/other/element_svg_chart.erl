@@ -128,7 +128,7 @@ render_background() ->
        [{class, 'svg-chart-background'}]).
 
 
-render(_ControlID, #svg_chart{title=test}) ->
+render_test_chart() ->
     Attrs =
 	[{'xmlns:svg', ?XMLNS_SVG},
 	 {version, "1.2"},
@@ -160,7 +160,11 @@ render(_ControlID, #svg_chart{title=test}) ->
                                               {'stroke-width', 3},
                                               {'text-anchor', "middle"}])
         ],
-    wf_tags:emit_tag('svg:svg', Content, Attrs);
+    wf_tags:emit_tag('svg:svg', Content, Attrs).
+
+
+render(_ControlID, #svg_chart{title=test}) ->
+    render_test_chart();
 
 render(ControlID, Record) when is_record(Record, svg_chart) ->
     %% io:format("General SVG Chart render(): ~p~n", [ControlID]),
