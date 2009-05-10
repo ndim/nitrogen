@@ -6,6 +6,20 @@
 % Copyright (C) 2009 Hans Ulrich Niedermann
 % See MIT-LICENSE for licensing information.
 
+%%
+%% Compatibility notes:
+%%  * FF3 needs fill-opacity="0.7", not fill-opacity="70%"
+%%    WebKit understands both
+%%  * WebKit draws svg:svg elements slightly moved to the side
+%%    FF3 draws them bang-on
+%%  * WebKit draws text in black
+%%    FF3 draws text according to fill and stroke
+%%  * FF3, WebKit will not interpret the SVG elements if the
+%%    HTTP Content-Type header is "text/html".
+%%    "application/xhtml+xml" is proven to work, "text/xml" probably
+%%    also does. (Presumably this is about tag soup vs. XML parser).
+%%
+
 -module(element_svg_chart).
 -compile(export_all).
 -include("wf.inc").
