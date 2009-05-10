@@ -138,6 +138,35 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 			      ], [{class, "svg-chart-legend"}]),
     CircID = wf:temp_id(),
     CircRef = lists:flatten(io_lib:format("#~s", [CircID])),
+    Background =
+	wf_tags:emit_tag
+	  ('svg:g',
+	   [
+	    wf_tags:emit_tag('svg:circle',
+			     [{cx, 50}, {cy, 50}, {r,30},
+			      {'fill', "#bb8888"},
+			      {'fill-opacity', "0.7"},
+			      {'stroke', "#ff0000"},
+			      {'stroke-width', 5},
+			      {id, CircID}
+			     ]),
+	    wf_tags:emit_tag('svg:use',
+			     [{x,150}, {y,50},
+			      {'xlink:href', CircRef},
+			      {transform, "translate(-50,-50)"}]),
+	    wf_tags:emit_tag('svg:use',
+			     [{x,100}, {y,50},
+			      {'xlink:href', CircRef},
+			      {transform, "translate(-50,-50)"}]),
+	    wf_tags:emit_tag('svg:rect',
+			     [{x,0}, {y,0},
+			      {height, 100},
+			      {width, 200},
+			      {fill, "#ffffcc"},
+			      {'fill-opacity', "0.7"}
+			     ])
+	   ],
+	   [{class, 'svg-chart-background'}]),
     Content =
 	[case Record#svg_chart.title of
 	     "" -> "";
@@ -147,25 +176,7 @@ render(ControlID, Record) when is_record(Record, svg_chart) ->
 	     "" -> "";
 	     Desc -> wf_tags:emit_tag('svg:desc', Desc, [])
 	 end,
-	 wf_tags:emit_tag('svg:circle', [{cx, 50}, {cy, 50}, {r,30},
-                                         {'fill', "#bb8888"},
-                                         {'fill-opacity', "0.7"},
-                                         {'stroke', "#ff0000"},
-                                         {'stroke-width', 5},
-					 {id, CircID}
-                                        ]),
-	 wf_tags:emit_tag('svg:use', [{x,150}, {y,50},
-				      {'xlink:href', CircRef},
-				      {transform, "translate(-50,-50)"}]),
-	 wf_tags:emit_tag('svg:use', [{x,100}, {y,50},
-				      {'xlink:href', CircRef},
-				      {transform, "translate(-50,-50)"}]),
-	 wf_tags:emit_tag('svg:rect', [{x,0}, {y,0},
-				       {height, 100},
-				       {width, 200},
-				       {fill, "#ffffcc"},
-				       {'fill-opacity', "0.7"}
-				      ]),
+	 Background,
 	 wf_tags:emit_tag('svg:g',
 			  [
 			   wf_tags:emit_tag('svg:g', Axes, [{class, "svg-chart-axes"}]),
